@@ -5,14 +5,14 @@ namespace Harvirsidhu\FilamentHeaderActions\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Harvirsidhu\FilamentHeaderActions\FilamentHeaderActions
+ * @see \Harvirsidhu\FilamentHeaderActions\HeaderActionsManager
  *
- * @method static \Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer compose(array $actions)
+ * @method static \Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer make(array $actions)
  */
 class FilamentHeaderActions extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Harvirsidhu\FilamentHeaderActions\FilamentHeaderActions::class;
+        return \Harvirsidhu\FilamentHeaderActions\HeaderActionsManager::class;
     }
 }

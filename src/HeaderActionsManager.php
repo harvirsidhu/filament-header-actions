@@ -4,12 +4,12 @@ namespace Harvirsidhu\FilamentHeaderActions;
 
 use Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer;
 
-class FilamentHeaderActions
+class HeaderActionsManager
 {
     /**
      * @param  array<mixed>  $actions
      */
-    public function compose(array $actions): HeaderActionsComposer
+    public function make(array $actions): HeaderActionsComposer
     {
         return HeaderActionsComposer::make($actions);
     }

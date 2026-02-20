@@ -1,8 +1,6 @@
 # Filament Header Actions
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/harvirsidhu/filament-header-actions.svg?style=flat-square)](https://packagist.org/packages/harvirsidhu/filament-header-actions)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/harvirsidhu/filament-header-actions/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/harvirsidhu/filament-header-actions/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/harvirsidhu/filament-header-actions/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/harvirsidhu/filament-header-actions/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/harvirsidhu/filament-header-actions.svg?style=flat-square)](https://packagist.org/packages/harvirsidhu/filament-header-actions)
 
 `filament-header-actions` composes an ordered list of Filament actions into:
@@ -63,26 +61,20 @@ public function getHeaderActions(): array
         Action::make('delete'),
     ];
 
-    return FilamentHeaderActions::compose($actions)->toHeaderActions();
+    return FilamentHeaderActions::make($actions)->toActions();
 }
 ```
 
 ### Full usage (all options)
 
 ```php
-FilamentHeaderActions::compose($actions)
+FilamentHeaderActions::make($actions)
     ->primaryCount(int $count = 1)
     ->moreLabel(string $label = 'More')
     ->moreIcon(?string $icon = null)
     ->moreColor(string $color = 'gray')
     ->moreHiddenLabel(bool $state = true)
-    ->toHeaderActions();
-```
-
-### Other API
-
-```php
-HeaderActionsComposer::make($actions)->toActions(); // alias of toHeaderActions()
+    ->toActions();
 ```
 
 ## Testing

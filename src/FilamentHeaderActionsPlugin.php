@@ -41,6 +41,6 @@ class FilamentHeaderActionsPlugin implements Plugin
      */
     public function compose(array $actions): HeaderActionsComposer
     {
-        return app(FilamentHeaderActions::class)->compose($actions);
+        return app(HeaderActionsManager::class)->make($actions);
     }
 }

@@ -7,7 +7,7 @@ use Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer;
 it('uses one primary action by default', function (): void {
     $actions = makeActions(['view', 'edit', 'archive']);
 
-    $composed = HeaderActionsComposer::make($actions)->toHeaderActions();
+    $composed = HeaderActionsComposer::make($actions)->toActions();
 
     expect($composed)->toHaveCount(2)
         ->and($composed[0])->toBe($actions[0])
@@ -19,7 +19,7 @@ it('supports a custom primary action count', function (): void {
 
     $composed = HeaderActionsComposer::make($actions)
         ->primaryCount(2)
-        ->toHeaderActions();
+        ->toActions();
 
     expect($composed)->toHaveCount(3)
         ->and($composed[0])->toBe($actions[0])
@@ -32,7 +32,7 @@ it('does not add a more action when there is no overflow', function (): void {
 
     $composed = HeaderActionsComposer::make($actions)
         ->primaryCount(2)
-        ->toHeaderActions();
+        ->toActions();
 
     expect($composed)->toHaveCount(2)
         ->and($composed[0])->toBe($actions[0])
@@ -44,7 +44,7 @@ it('flattens a single overflow action', function (): void {
 
     $composed = HeaderActionsComposer::make($actions)
         ->primaryCount(1)
-        ->toHeaderActions();
+        ->toActions();
 
     expect($composed)->toHaveCount(2)
         ->and($composed[0])->toBe($actions[0])
@@ -57,7 +57,7 @@ it('groups multiple overflow actions under more', function (): void {
 
     $composed = HeaderActionsComposer::make($actions)
         ->primaryCount(1)
-        ->toHeaderActions();
+        ->toActions();
 
     expect($composed)->toHaveCount(2)
         ->and($composed[1])->toBeInstanceOf(ActionGroup::class);
@@ -70,7 +70,7 @@ it('supports configurable more presentation options', function (): void {
         ->moreLabel('Options')
         ->moreIcon('heroicon-m-bars-3')
         ->moreColor('danger')
-        ->toHeaderActions();
+        ->toActions();
 
     /** @var ActionGroup $group */
     $group = $composed[1];
@@ -85,7 +85,7 @@ it('can hide the more label when supported by current filament version', functio
 
     $composed = HeaderActionsComposer::make($actions)
         ->moreHiddenLabel()
-        ->toHeaderActions();
+        ->toActions();
 
     /** @var ActionGroup $group */
     $group = $composed[1];
@@ -99,12 +99,12 @@ it('can hide the more label when supported by current filament version', functio
     expect(getConfiguredValue($group, ['isLabelHidden']))->toBeTrue();
 });
 
-it('shares equivalent behavior between helper aliases', function (): void {
+it('returns actions with toActions', function (): void {
     $actions = makeActions(['view', 'edit', 'archive']);
 
     $composer = HeaderActionsComposer::make($actions)->primaryCount(1);
 
-    expect($composer->toActions())->toEqual($composer->toHeaderActions());
+    expect($composer->toActions())->toHaveCount(2);
 });
 
 /**

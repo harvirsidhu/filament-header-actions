@@ -48,7 +48,7 @@ class FilamentHeaderActionsServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(FilamentHeaderActions::class, fn (): FilamentHeaderActions => new FilamentHeaderActions);
+        $this->app->singleton(HeaderActionsManager::class, fn (): HeaderActionsManager => new HeaderActionsManager);
     }
 
     public function packageBooted(): void

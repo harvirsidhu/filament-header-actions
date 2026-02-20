@@ -79,7 +79,7 @@ class HeaderActionsComposer
     /**
      * @return array<mixed>
      */
-    public function toHeaderActions(): array
+    public function toActions(): array
     {
         $primary = array_values(array_slice($this->actions, 0, $this->primaryCount));
         $overflow = array_values(array_slice($this->actions, $this->primaryCount));
@@ -93,14 +93,6 @@ class HeaderActionsComposer
         }
 
         return [...$primary, $this->makeMoreGroup($overflow)];
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function toActions(): array
-    {
-        return $this->toHeaderActions();
     }
 
     /**
