@@ -11,7 +11,8 @@ Behavior is deterministic:
 - no overflow => no `More`,
 - one overflow action => flattened directly,
 - two or more overflow actions => grouped under `More`.
-- actions that evaluate as hidden, invisible, or unauthorized are ignored before composing.
+- actions that evaluate as hidden or invisible are ignored before composing.
+- authorization filtering is opt-in via `filter_unauthorized` (default `false`).
 
 ## Compatibility
 
@@ -43,6 +44,7 @@ return [
     'hidden_label' => false,
     'button' => true,
     'icon_position' => \Filament\Support\Enums\IconPosition::After, // right
+    'filter_unauthorized' => false,
 ];
 ```
 
@@ -75,7 +77,7 @@ public function getHeaderActions(): array
         Action::make('edit')->hidden(true),     // ignored
         Action::make('archive'),                // kept
         Action::make('delete')->visible(false), // ignored
-        Action::make('publish')->authorize('update', $this->record), // evaluated
+        Action::make('publish')->authorize('update', $this->record), // kept by default
     ];
 
     // primary_count = 1:
@@ -83,6 +85,14 @@ public function getHeaderActions(): array
     // - remaining available actions go to More (or flatten if only one)
     return FilamentHeaderActions::make($actions)->toActions();
 }
+```
+
+### Optional authorization pre-filtering
+
+```php
+return FilamentHeaderActions::make($actions)
+    ->filterUnauthorized() // opt-in (default is false)
+    ->toActions();
 ```
 
 ### Full usage (all options)
@@ -96,6 +106,7 @@ FilamentHeaderActions::make($actions)
     ->hiddenLabel(bool $state = true)
     ->button(bool $state = true)
     ->iconPosition(\Filament\Support\Enums\IconPosition $position = \Filament\Support\Enums\IconPosition::After)
+    ->filterUnauthorized(bool $state = true)
     ->toActions();
 ```
 

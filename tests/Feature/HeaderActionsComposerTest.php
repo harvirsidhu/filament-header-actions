@@ -179,12 +179,27 @@ it('filters hidden actions before composing', function (): void {
         ->and($composed[1])->toBe($delete);
 });
 
-it('filters invisible and unauthorized actions before composing', function (): void {
+it('filters invisible actions before composing', function (): void {
     $invisible = makeFakeAction('invisible', visible: false);
     $unauthorized = makeFakeAction('unauthorized', authorized: false);
     $view = makeFakeAction('view');
 
     $composed = HeaderActionsComposer::make([$invisible, $unauthorized, $view])
+        ->primaryCount(1)
+        ->toActions();
+
+    expect($composed)->toHaveCount(2)
+        ->and($composed[0])->toBe($unauthorized)
+        ->and($composed[1])->toBe($view);
+});
+
+it('can filter unauthorized actions when enabled', function (): void {
+    $invisible = makeFakeAction('invisible', visible: false);
+    $unauthorized = makeFakeAction('unauthorized', authorized: false);
+    $view = makeFakeAction('view');
+
+    $composed = HeaderActionsComposer::make([$invisible, $unauthorized, $view])
+        ->filterUnauthorized()
         ->primaryCount(1)
         ->toActions();
 

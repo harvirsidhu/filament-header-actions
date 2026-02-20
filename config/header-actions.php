@@ -8,4 +8,5 @@ return [
     'hidden_label' => false,
     'button' => true,
     'icon_position' => \Filament\Support\Enums\IconPosition::After,
+    'filter_unauthorized' => false,
 ];

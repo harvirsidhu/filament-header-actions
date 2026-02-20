@@ -25,6 +25,7 @@ class HeaderActionsComposer
         protected bool $hiddenLabel = false,
         protected bool $button = true,
         protected IconPosition $iconPosition = IconPosition::After,
+        protected bool $filterUnauthorized = false,
     ) {
         $this->icon ??= $this->resolveDefaultMoreIcon();
     }
@@ -43,6 +44,7 @@ class HeaderActionsComposer
             hiddenLabel: (bool) config('header-actions.hidden_label', false),
             button: (bool) config('header-actions.button', true),
             iconPosition: static::normalizeIconPosition(config('header-actions.icon_position', IconPosition::After)),
+            filterUnauthorized: (bool) config('header-actions.filter_unauthorized', false),
         );
     }
 
@@ -99,6 +101,13 @@ class HeaderActionsComposer
         return $this;
     }
 
+    public function filterUnauthorized(bool $state = true): static
+    {
+        $this->filterUnauthorized = $state;
+
+        return $this;
+    }
+
     /**
      * @return array<mixed>
      */
@@ -148,9 +157,11 @@ class HeaderActionsComposer
             return false;
         }
 
-        $isAuthorized = $this->resolveBooleanMethodResult($action, ['isAuthorized']);
-        if ($isAuthorized === false) {
-            return false;
+        if ($this->filterUnauthorized) {
+            $isAuthorized = $this->resolveBooleanMethodResult($action, ['isAuthorized']);
+            if ($isAuthorized === false) {
+                return false;
+            }
         }
 
         return true;
