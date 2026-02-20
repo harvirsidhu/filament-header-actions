@@ -62,7 +62,7 @@ class HeaderActionsComposer
         return $this;
     }
 
-    public function icon(string|BackedEnum|null $icon = null): static
+    public function icon(string | BackedEnum | null $icon = null): static
     {
         $this->icon = static::normalizeIcon($icon) ?? $this->resolveDefaultMoreIcon();
 
@@ -79,14 +79,14 @@ class HeaderActionsComposer
     public function color(string $color = 'gray'): static
     {
         $this->color = $color;
- 
+
         return $this;
     }
 
     public function button(bool $state = true): static
     {
         $this->button = $state;
- 
+
         return $this;
     }
 
