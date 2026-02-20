@@ -3,6 +3,7 @@
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Icons\Heroicon;
 use Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer;
 
 enum FakeMoreIcon: string
@@ -100,8 +101,8 @@ it('accepts a backed enum icon with moreIcon', function (): void {
         ->toBe('heroicon-m-ellipsis-vertical');
 });
 
-it('accepts a backed enum icon from config', function (): void {
-    config()->set('header-actions.icon', FakeMoreIcon::EllipsisVertical);
+it('accepts a Heroicon enum icon from config', function (): void {
+    config()->set('header-actions.icon', Heroicon::EllipsisVertical);
 
     $actions = makeActions(['view', 'edit', 'archive']);
     $composed = HeaderActionsComposer::make($actions)->toActions();

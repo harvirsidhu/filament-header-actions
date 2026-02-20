@@ -4,6 +4,8 @@ namespace Harvirsidhu\FilamentHeaderActions\Actions;
 
 use BackedEnum;
 use Filament\Actions\ActionGroup;
+use Filament\Support\Contracts\ScalableIcon;
+use Filament\Support\Enums\IconSize;
 use Filament\Support\Enums\IconPosition;
 use Harvirsidhu\FilamentHeaderActions\Support\FilamentCompatibility;
 use InvalidArgumentException;
@@ -217,6 +219,10 @@ class HeaderActionsComposer
 
         if (is_string($icon)) {
             return $icon;
+        }
+
+        if ($icon instanceof ScalableIcon) {
+            return $icon->getIconForSize(IconSize::Medium);
         }
 
         if ($icon instanceof BackedEnum) {
