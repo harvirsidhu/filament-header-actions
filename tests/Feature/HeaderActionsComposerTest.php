@@ -157,6 +157,25 @@ it('can configure icon position with right as default', function (): void {
         ->and(getConfiguredValue($configuredGroup, ['iconPosition']))->toBe('before');
 });
 
+it('accepts icon position as string values', function (): void {
+    $actions = makeActions(['view', 'edit', 'archive']);
+
+    $composed = HeaderActionsComposer::make($actions)
+        ->iconPosition('before')
+        ->toActions();
+
+    /** @var ActionGroup $group */
+    $group = $composed[1];
+
+    if (method_exists($group, 'getIconPosition')) {
+        expect(normalizeBackedEnumValue($group->getIconPosition()))->toBe('before');
+
+        return;
+    }
+
+    expect(getConfiguredValue($group, ['iconPosition']))->toBe('before');
+});
+
 it('returns actions with toActions', function (): void {
     $actions = makeActions(['view', 'edit', 'archive']);
 

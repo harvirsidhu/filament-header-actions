@@ -94,9 +94,9 @@ class HeaderActionsComposer
         return $this;
     }
 
-    public function iconPosition(IconPosition $position = IconPosition::After): static
+    public function iconPosition(IconPosition | string | BackedEnum | null $position = IconPosition::After): static
     {
-        $this->iconPosition = $position;
+        $this->iconPosition = static::normalizeIconPosition($position);
 
         return $this;
     }
