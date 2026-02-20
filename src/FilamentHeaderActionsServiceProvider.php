@@ -121,5 +121,4 @@ class FilamentHeaderActionsServiceProvider extends PackageServiceProvider
     {
         return [];
     }
-
 }
