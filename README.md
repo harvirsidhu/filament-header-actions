@@ -1,70 +1,88 @@
-# :package_description
+# Filament Header Actions
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/harvirsidhu/filament-header-actions.svg?style=flat-square)](https://packagist.org/packages/harvirsidhu/filament-header-actions)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/harvirsidhu/filament-header-actions/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/harvirsidhu/filament-header-actions/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/harvirsidhu/filament-header-actions/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/harvirsidhu/filament-header-actions/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/harvirsidhu/filament-header-actions.svg?style=flat-square)](https://packagist.org/packages/harvirsidhu/filament-header-actions)
 
-<!--delete-->
----
-This repo can be used to scaffold a Filament plugin. Follow these steps to get started:
+`filament-header-actions` composes an ordered list of Filament actions into:
+- primary actions (first `N`, default `1`),
+- and a `More` overflow action group for remaining actions.
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Make something great!
----
-<!--/delete-->
+Behavior is deterministic:
+- no overflow => no `More`,
+- one overflow action => flattened directly,
+- two or more overflow actions => grouped under `More`.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+## Compatibility
+
+| Package | Supported versions |
+| --- | --- |
+| Filament | `^4.0` and `^5.0` |
+| PHP | `^8.2` |
 
 ## Installation
 
-You can install the package via composer:
+```bash
+composer require harvirsidhu/filament-header-actions
+```
+
+Config is optional. The package works without publishing it.
+
+If you want to customize defaults, publish config:
 
 ```bash
-composer require :vendor_slug/:package_slug
+php artisan vendor:publish --tag="filament-header-actions-config"
 ```
-
-> [!IMPORTANT]
-> If you have not set up a custom theme and are using Filament Panels follow the instructions in the [Filament Docs](https://filamentphp.com/docs/4.x/styling/overview#creating-a-custom-theme) first.
-
-After setting up a custom theme add the plugin's views to your theme css file or your app's css file if using the standalone packages.
-
-```css
-@source '../../../../vendor/:vendor_slug/:package_slug/resources/**/*.blade.php';
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
-
-This is the contents of the published config file:
 
 ```php
 return [
+    'primary_count' => 1,
+    'more' => [
+        'label' => 'More',
+        'icon' => 'heroicon-m-ellipsis-horizontal',
+        'color' => 'gray',
+        'hidden_label' => false,
+    ],
 ];
 ```
 
 ## Usage
 
+### Easy usage
+
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use Filament\Actions\Action;
+use Harvirsidhu\FilamentHeaderActions\Facades\FilamentHeaderActions;
+
+public function getHeaderActions(): array
+{
+    $actions = [
+        Action::make('edit'),
+        Action::make('archive'),
+        Action::make('delete'),
+    ];
+
+    return FilamentHeaderActions::compose($actions)->toHeaderActions();
+}
+```
+
+### Full usage (all options)
+
+```php
+FilamentHeaderActions::compose($actions)
+    ->primaryCount(int $count = 1)
+    ->moreLabel(string $label = 'More')
+    ->moreIcon(?string $icon = null)
+    ->moreColor(string $color = 'gray')
+    ->moreHiddenLabel(bool $state = true)
+    ->toHeaderActions();
+```
+
+### Other API
+
+```php
+HeaderActionsComposer::make($actions)->toActions(); // alias of toHeaderActions()
 ```
 
 ## Testing
@@ -72,6 +90,13 @@ echo $variable->echoPhrase('Hello, VendorName!');
 ```bash
 composer test
 ```
+
+## Release checklist
+
+- Update changelog with user-facing changes.
+- Run linting and static analysis.
+- Run Pest locally.
+- Ensure CI passes Filament 4 and 5 matrix jobs.
 
 ## Changelog
 
@@ -87,8 +112,8 @@ Please review [our security policy](.github/SECURITY.md) on how to report securi
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
+- [harvirsidhu](https://github.com/harvirsidhu)
+- [All Contributors](https://github.com/harvirsidhu/filament-header-actions/contributors)
 
 ## License
 

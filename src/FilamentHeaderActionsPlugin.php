@@ -1,15 +1,16 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Harvirsidhu\FilamentHeaderActions;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Harvirsidhu\FilamentHeaderActions\Actions\HeaderActionsComposer;
 
-class SkeletonPlugin implements Plugin
+class FilamentHeaderActionsPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'filament-header-actions';
     }
 
     public function register(Panel $panel): void
@@ -33,5 +34,13 @@ class SkeletonPlugin implements Plugin
         $plugin = filament(app(static::class)->getId());
 
         return $plugin;
+    }
+
+    /**
+     * @param  array<mixed>  $actions
+     */
+    public function compose(array $actions): HeaderActionsComposer
+    {
+        return app(FilamentHeaderActions::class)->compose($actions);
     }
 }

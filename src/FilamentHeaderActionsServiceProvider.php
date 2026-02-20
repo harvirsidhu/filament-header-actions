@@ -1,26 +1,22 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Harvirsidhu\FilamentHeaderActions;
 
-use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
-use Filament\Support\Assets\Css;
-use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
-use Illuminate\Filesystem\Filesystem;
+use Harvirsidhu\FilamentHeaderActions\Commands\FilamentHeaderActionsCommand;
+use Harvirsidhu\FilamentHeaderActions\Testing\TestsFilamentHeaderActions;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
-use VendorName\Skeleton\Testing\TestsSkeleton;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class FilamentHeaderActionsServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'skeleton';
+    public static string $name = 'filament-header-actions';
 
-    public static string $viewNamespace = 'skeleton';
+    public static string $viewNamespace = 'filament-header-actions';
 
     public function configurePackage(Package $package): void
     {
@@ -34,19 +30,11 @@ class SkeletonServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub(':vendor_slug/:package_slug');
+                    ->askToStarRepoOnGitHub('harvirsidhu/filament-header-actions');
             });
 
-        $configFileName = $package->shortName();
-
-        if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
-            $package->hasConfigFile();
-        }
-
-        if (file_exists($package->basePath('/../database/migrations'))) {
-            $package->hasMigrations($this->getMigrations());
+        if (file_exists($package->basePath('/../config/header-actions.php'))) {
+            $package->hasConfigFile('header-actions');
         }
 
         if (file_exists($package->basePath('/../resources/lang'))) {
@@ -58,7 +46,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(FilamentHeaderActions::class, fn (): FilamentHeaderActions => new FilamentHeaderActions);
+    }
 
     public function packageBooted(): void
     {
@@ -76,22 +67,13 @@ class SkeletonServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
-        // Handle Stubs
-        if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/skeleton/{$file->getFilename()}"),
-                ], 'skeleton-stubs');
-            }
-        }
-
         // Testing
-        Testable::mixin(new TestsSkeleton);
+        Testable::mixin(new TestsFilamentHeaderActions);
     }
 
     protected function getAssetPackageName(): ?string
     {
-        return ':vendor_slug/:package_slug';
+        return 'harvirsidhu/filament-header-actions';
     }
 
     /**
@@ -100,9 +82,9 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('skeleton', __DIR__ . '/../resources/dist/components/skeleton.js'),
-            // Css::make('skeleton-styles', __DIR__ . '/../resources/dist/skeleton.css'),
-            // Js::make('skeleton-scripts', __DIR__ . '/../resources/dist/skeleton.js'),
+            // AlpineComponent::make('filament-header-actions', __DIR__ . '/../resources/dist/components/filament-header-actions.js'),
+            // Css::make('filament-header-actions-styles', __DIR__ . '/../resources/dist/filament-header-actions.css'),
+            // Js::make('filament-header-actions-scripts', __DIR__ . '/../resources/dist/filament-header-actions.js'),
         ];
     }
 
@@ -112,7 +94,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         return [
-            SkeletonCommand::class,
+            FilamentHeaderActionsCommand::class,
         ];
     }
 
@@ -140,13 +122,4 @@ class SkeletonServiceProvider extends PackageServiceProvider
         return [];
     }
 
-    /**
-     * @return array<string>
-     */
-    protected function getMigrations(): array
-    {
-        return [
-            'create_skeleton_table',
-        ];
-    }
 }
