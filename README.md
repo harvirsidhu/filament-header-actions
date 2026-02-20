@@ -11,6 +11,7 @@ Behavior is deterministic:
 - no overflow => no `More`,
 - one overflow action => flattened directly,
 - two or more overflow actions => grouped under `More`.
+- actions that evaluate as hidden, invisible, or unauthorized are ignored before composing.
 
 ## Compatibility
 
@@ -36,12 +37,12 @@ php artisan vendor:publish --tag="filament-header-actions-config"
 ```php
 return [
     'primary_count' => 1,
-    'more' => [
-        'label' => 'More',
-        'icon' => 'heroicon-m-ellipsis-horizontal',
-        'color' => 'gray',
-        'hidden_label' => false,
-    ],
+    'label' => 'More',
+    'icon' => 'heroicon-m-ellipsis-horizontal',
+    'color' => 'gray',
+    'hidden_label' => false,
+    'button' => true,
+    'icon_position' => \Filament\Support\Enums\IconPosition::After, // right
 ];
 ```
 
@@ -65,15 +66,36 @@ public function getHeaderActions(): array
 }
 ```
 
+### Visibility filtering example
+
+```php
+public function getHeaderActions(): array
+{
+    $actions = [
+        Action::make('edit')->hidden(true),     // ignored
+        Action::make('archive'),                // kept
+        Action::make('delete')->visible(false), // ignored
+        Action::make('publish')->authorize('update', $this->record), // evaluated
+    ];
+
+    // primary_count = 1:
+    // - first available action stays primary
+    // - remaining available actions go to More (or flatten if only one)
+    return FilamentHeaderActions::make($actions)->toActions();
+}
+```
+
 ### Full usage (all options)
 
 ```php
 FilamentHeaderActions::make($actions)
     ->primaryCount(int $count = 1)
-    ->moreLabel(string $label = 'More')
-    ->moreIcon(?string $icon = null)
-    ->moreColor(string $color = 'gray')
-    ->moreHiddenLabel(bool $state = true)
+    ->label(string $label = 'More')
+    ->icon(string|\BackedEnum|null $icon = null)
+    ->color(string $color = 'gray')
+    ->hiddenLabel(bool $state = true)
+    ->button(bool $state = true)
+    ->iconPosition(\Filament\Support\Enums\IconPosition $position = \Filament\Support\Enums\IconPosition::After)
     ->toActions();
 ```
 

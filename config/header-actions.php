@@ -2,10 +2,10 @@
 
 return [
     'primary_count' => 1,
-    'more' => [
-        'label' => 'More',
-        'icon' => 'heroicon-m-ellipsis-horizontal',
-        'color' => 'gray',
-        'hidden_label' => false,
-    ],
+    'label' => 'More',
+    'icon' => \Filament\Support\Icons\Heroicon::EllipsisVertical,
+    'color' => 'gray',
+    'hidden_label' => false,
+    'button' => true,
+    'icon_position' => \Filament\Support\Enums\IconPosition::After,
 ];
